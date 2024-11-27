@@ -94,12 +94,19 @@ const classMapping = {
 };
 
 // Make predictions and draw bounding boxes
+// Make predictions and draw bounding boxes
 async function predictWebcam() {
   if (!model) {
     return;
   }
 
+  // Get video dimensions
+  const videoWidth = video.videoWidth;
+  const videoHeight = video.videoHeight;
+
+  // Preprocess the image for the model
   const inputTensor = preprocessImage(video);
+  
   try {
     const outputTensor = await model.predict(inputTensor);
     
@@ -109,11 +116,10 @@ async function predictWebcam() {
     }
     children = [];
 
+    // Get the model's output tensors
     const boxes = outputTensor['StatefulPartitionedCall:3'].dataSync();
     const classes = outputTensor['StatefulPartitionedCall:2'].dataSync();
     const scores = outputTensor['StatefulPartitionedCall:1'].dataSync();
-    const videoWidth = video.videoWidth;
-    const videoHeight = video.videoHeight;
 
     // Loop through predictions and draw boxes
     for (let i = 0; i < boxes.length / 4; i++) {
@@ -125,14 +131,16 @@ async function predictWebcam() {
       const classId = classes[i];
       const score = scores[i];
 
-      if (score > 0.7) {  // Draw boxes for detections with confidence > 0.5
+      // Only draw boxes with high confidence (greater than 0.7)
+      if (score > 0.7) {
         const bbox = document.createElement('div');
         bbox.classList.add('highlighter');
         bbox.style.left = `${xmin}px`;
         bbox.style.top = `${ymin}px`;
         bbox.style.width = `${xmax - xmin}px`;
         bbox.style.height = `${ymax - ymin}px`;
-        
+
+        // Create and position the label
         const label = document.createElement('p');
         const className = classMapping[classId];
         label.innerText = `${className}, ${score.toFixed(2)}`;
@@ -140,8 +148,10 @@ async function predictWebcam() {
         label.style.left = `${xmin}px`;
         label.style.top = `${ymin - 28}px`;
 
+        // Style the label
         label.style.fontSize = '8px';
 
+        // Add bounding box and label to liveView
         liveView.appendChild(bbox);
         liveView.appendChild(label);
         children.push(bbox);
@@ -149,7 +159,7 @@ async function predictWebcam() {
       }
     }
 
-    // Call this function again to continue detecting
+    // Request next frame for continuous prediction
     window.requestAnimationFrame(predictWebcam);
   } catch (error) {
     console.error('Error during inference:', error);

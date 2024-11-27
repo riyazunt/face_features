@@ -1,40 +1,35 @@
-/**
- * @license
- * Copyright 2018 Google LLC. All Rights Reserved.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * =============================================================================
- */
-
-/* CSS files add styling rules to your content */
-
 body {
   font-family: helvetica, arial, sans-serif;
   margin: 2em;
   color: #3D3D3D;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 h1 {
   font-style: italic;
   color: #FF6F00;
+  text-align: center;
+  font-size: 1.8rem; /* Adjusted for responsiveness */
+}
+
+p {
+  text-align: center;
+  font-size: 1rem;
 }
 
 video {
   display: block;
+  width: 100%; /* Make video width responsive */
+  max-width: 640px; /* Limit the max width */
+  height: auto;
+  margin: 0 auto; /* Center the video */
 }
 
 section {
   opacity: 1;
   transition: opacity 500ms ease-in-out;
+  text-align: center;
 }
 
 .removed {
@@ -47,10 +42,10 @@ section {
 
 .camView {
   position: relative;
-  float: left;
-  width: calc(100% - 20px);
-  margin: 10px;
+  width: 100%; /* Take full width */
+  margin: 10px auto;
   cursor: pointer;
+  max-width: 640px; /* Set a max-width */
 }
 
 .camView p {
@@ -68,4 +63,55 @@ section {
   border: 1px dashed #fff;
   z-index: 1;
   position: absolute;
+}
+
+#webcamButton {
+  background-color: #FF6F00;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+#webcamButton.removed {
+  display: none;
+}
+
+#video {
+  width: 100%; /* Make the video responsive */
+  height: auto; /* Maintain the aspect ratio */
+}
+
+#liveView {
+  position: relative;
+  width: 100%; /* Same width as the video */
+  height: auto; /* Same height as the video */
+}
+
+/* Media Queries for small devices */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.5rem; /* Adjust heading font size for small screens */
+  }
+
+  .camView p {
+    font-size: 10px; /* Smaller text for mobile */
+  }
+
+  #webcamButton {
+    font-size: 1rem;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 400px) {
+  h1 {
+    font-size: 1.2rem; /* Adjust heading for very small screens */
+  }
+
+  p {
+    font-size: 0.9rem; /* Smaller text for small screens */
+  }
 }
