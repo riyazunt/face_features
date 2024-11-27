@@ -94,22 +94,21 @@ const classMapping = {
 };
 
 // Make predictions and draw bounding boxes
-// Make predictions and draw bounding boxes
 async function predictWebcam() {
   if (!model) {
     return;
   }
 
-  // Get video dimensions
-  const videoWidth = video.videoWidth;
-  const videoHeight = video.videoHeight;
+  // Get the current video width and height (this is dynamic)
+  const videoWidth = video.clientWidth; // Get width of video element on the screen
+  const videoHeight = video.clientHeight; // Get height of video element on the screen
 
   // Preprocess the image for the model
   const inputTensor = preprocessImage(video);
   
   try {
     const outputTensor = await model.predict(inputTensor);
-    
+
     // Clear previous bounding boxes
     for (let i = 0; i < children.length; i++) {
       liveView.removeChild(children[i]);
@@ -135,6 +134,7 @@ async function predictWebcam() {
       if (score > 0.7) {
         const bbox = document.createElement('div');
         bbox.classList.add('highlighter');
+        bbox.style.position = 'absolute';
         bbox.style.left = `${xmin}px`;
         bbox.style.top = `${ymin}px`;
         bbox.style.width = `${xmax - xmin}px`;
@@ -165,6 +165,7 @@ async function predictWebcam() {
     console.error('Error during inference:', error);
   }
 }
+
 
 // Load the model and start webcam stream
 loadModel();
