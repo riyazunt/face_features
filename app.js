@@ -43,7 +43,7 @@ function enableCam(event) {
 // Preprocess the webcam frame for TensorFlow Lite model input
 function preprocessImage(frame) {
   let imgTensor = tf.browser.fromPixels(frame);
-  imgTensor = tf.image.resizeBilinear(imgTensor, [320, 320]); // Resize to model input size (320x320)
+  imgTensor = tf.image.resizeBilinear(imgTensor, [224, 224]); // Resize to model input size (320x320)
   const processedImg = tf.sub(tf.div(tf.expandDims(imgTensor), 127.5), 1); // Normalize image
   return processedImg;
 }
